@@ -26,24 +26,33 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  // 🔑 The Global Key - acts like a remote control for the form
   final _formKey = GlobalKey<FormState>();
-  
-  // 📝 Controllers to track what the user types
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // 🎯 Avatar selection
+  String _selectedAvatar = '😊';
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold( // 👨 Parent
+    return Scaffold(
       appBar: AppBar(
         title: const Text('Join Us Today for the Cash Money!'),
         backgroundColor: Colors.purple,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form( // 👶 Child
+        child: Form(
           key: _formKey,
           child: Column(
             children: [
@@ -52,8 +61,8 @@ class _SignupPageState extends State<SignupPage> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
-              
-              // 👤 Name Field
+
+              // 👤 Name
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(
@@ -69,8 +78,8 @@ class _SignupPageState extends State<SignupPage> {
                 },
               ),
               const SizedBox(height: 16),
-              
-              // 📧 Email Field
+
+              // 📧 Email
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(
@@ -89,8 +98,8 @@ class _SignupPageState extends State<SignupPage> {
                 },
               ),
               const SizedBox(height: 16),
-              
-              // 🔒 Password Field
+
+              // 🔒 Password
               TextFormField(
                 controller: _passwordController,
                 obscureText: true,
@@ -109,27 +118,122 @@ class _SignupPageState extends State<SignupPage> {
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
+
+              // 🔒 Confirm Password (BONUS)
+              TextFormField(
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Confirm Password',
+                  prefixIcon: Icon(Icons.lock_outline),
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please confirm your password';
+                  }
+                  if (value != _passwordController.text) {
+                    return 'Passwords do not match';
+                  }
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 20),
+
+              // 😎 Avatar Picker (BONUS)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: ['😊', '🚀', '🔥', '🎯', '😎'].map((emoji) {
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedAvatar = emoji;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        emoji,
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: _selectedAvatar == emoji
+                              ? Colors.purple
+                              : Colors.black,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+
               const SizedBox(height: 24),
-              
-              // 🚀 Sign Up Button
+
+              // 🚀 Sign Up Button (UPDATED → NAVIGATION)
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Welcome! Account created successfully.'),
-                        backgroundColor: Colors.green,
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WelcomeScreen(
+                          name: _nameController.text,
+                          avatar: _selectedAvatar,
+                        ),
                       ),
                     );
                   }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 ),
                 child: const Text(
                   'Sign Up',
                   style: TextStyle(fontSize: 18),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// 🎉 Welcome Screen (BONUS + ANIMATION)
+class WelcomeScreen extends StatelessWidget {
+  final String name;
+  final String avatar;
+
+  const WelcomeScreen({
+    super.key,
+    required this.name,
+    required this.avatar,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Welcome'),
+        backgroundColor: Colors.purple,
+      ),
+      body: Center(
+        child: AnimatedOpacity(
+          opacity: 1.0,
+          duration: const Duration(seconds: 2),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(avatar, style: const TextStyle(fontSize: 60)),
+              const SizedBox(height: 20),
+              Text(
+                'Welcome, $name!',
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
