@@ -54,12 +54,9 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+  String get formattedDate {
+    if (_selectedDate == null) return "Pick Birth Date";
+    return "${_selectedDate!.month}/${_selectedDate!.day}/${_selectedDate!.year}";
   }
 
   @override
@@ -79,12 +76,11 @@ class _SignupScreenState extends State<SignupScreen> {
                   children: [
                     const Text(
                       'Create Your Account',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 20),
+
                     TextFormField(
                       controller: _nameController,
                       decoration: const InputDecoration(
@@ -93,9 +89,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) =>
-                          value == null || value.isEmpty ? 'Enter your name' : null,
+                          value!.isEmpty ? 'Enter your name' : null,
                     ),
+
                     const SizedBox(height: 16),
+
                     TextFormField(
                       controller: _emailController,
                       decoration: const InputDecoration(
@@ -104,9 +102,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) =>
-                          value != null && value.contains('@') ? null : 'Enter valid email',
+                          value!.contains('@') ? null : 'Enter valid email',
                     ),
+
                     const SizedBox(height: 16),
+
                     TextFormField(
                       controller: _passwordController,
                       obscureText: _obscurePassword,
@@ -115,11 +115,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         prefixIcon: const Icon(Icons.lock),
                         border: const OutlineInputBorder(),
                         suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
+                          icon: Icon(_obscurePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off),
                           onPressed: () {
                             setState(() {
                               _obscurePassword = !_obscurePassword;
@@ -128,9 +126,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       validator: (value) =>
-                          value != null && value.length >= 6 ? null : 'Min 6 characters',
+                          value!.length < 6 ? 'Min 6 characters' : null,
                     ),
+
                     const SizedBox(height: 16),
+
                     TextFormField(
                       obscureText: true,
                       decoration: const InputDecoration(
@@ -139,18 +139,19 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) =>
-                          value == _passwordController.text ? null : 'Passwords do not match',
+                          value != _passwordController.text
+                              ? 'Passwords do not match'
+                              : null,
                     ),
+
                     const SizedBox(height: 16),
+
                     ListTile(
-                      title: Text(
-                        _selectedDate == null
-                            ? 'Pick Birth Date'
-                            : _selectedDate.toString().split(' ')[0],
-                      ),
+                      title: Text(formattedDate),
                       trailing: const Icon(Icons.calendar_today),
                       onTap: _pickDate,
                     ),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: ['😊', '🚀', '🔥', '🎯', '😎'].map((emoji) {
@@ -175,11 +176,14 @@ class _SignupScreenState extends State<SignupScreen> {
                         );
                       }).toList(),
                     ),
+
                     const SizedBox(height: 24),
+
                     ElevatedButton(
                       onPressed: _submit,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.purple,
+                        foregroundColor: Colors.white, // FIXED
                       ),
                       child: const Text('Sign Up'),
                     ),
