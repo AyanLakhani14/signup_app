@@ -34,18 +34,25 @@ class _SuccessScreenState extends State<SuccessScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Success')),
+      appBar: AppBar(title: const Text("Success")),
       body: Stack(
         alignment: Alignment.center,
         children: [
-          ConfettiWidget(confettiController: _controller),
+          ConfettiWidget(
+            confettiController: _controller,
+            blastDirectionality: BlastDirectionality.explosive,
+            shouldLoop: false,
+            emissionFrequency: 0.05,
+            numberOfParticles: 20,
+            gravity: 0.2,
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(widget.avatar, style: const TextStyle(fontSize: 60)),
               const SizedBox(height: 20),
               Text(
-                'Welcome, ${widget.name}!',
+                "Welcome, ${widget.name}!",
                 style: const TextStyle(fontSize: 24),
               ),
             ],
