@@ -4,7 +4,7 @@ void main() {
   runApp(const MyApp());
 }
 
-// 🧓 Great-Grandparent
+// Great-Grandparent
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -32,7 +32,7 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // 🎯 Avatar selection
+  //  Avatar selection
   String _selectedAvatar = '😊';
 
   @override
@@ -62,7 +62,7 @@ class _SignupPageState extends State<SignupPage> {
               ),
               const SizedBox(height: 20),
 
-              // 👤 Name
+              //  Name
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(
@@ -79,7 +79,7 @@ class _SignupPageState extends State<SignupPage> {
               ),
               const SizedBox(height: 16),
 
-              // 📧 Email
+              //  Email
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(
@@ -120,7 +120,7 @@ class _SignupPageState extends State<SignupPage> {
               ),
               const SizedBox(height: 16),
 
-              // 🔒 Confirm Password (BONUS)
+              //  Confirm Password (BONUS)
               TextFormField(
                 obscureText: true,
                 decoration: const InputDecoration(
@@ -169,7 +169,7 @@ class _SignupPageState extends State<SignupPage> {
 
               const SizedBox(height: 24),
 
-              // 🚀 Sign Up Button (UPDATED → NAVIGATION)
+              //  Sign Up Button (UPDATED → NAVIGATION)
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
