@@ -48,6 +48,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(widget.avatar, style: const TextStyle(fontSize: 60)),
               const SizedBox(height: 20),
